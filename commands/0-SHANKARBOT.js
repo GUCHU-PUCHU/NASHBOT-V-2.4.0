@@ -3,7 +3,8 @@ module.exports = {
     description: 'Respond with funny messages when someone writes taklu or bot',
     nashPrefix: false,  // Added nashPrefix here
     execute: async (api, event) => {
-        const message = event.body.toLowerCase();
+        const message = event.body ? event.body.toLowerCase() : '';  // Checking if message exists
+        console.log("Message received: ", message);  // For debugging
         const userName = event.senderID;
 
         // Funny responses array
@@ -34,16 +35,16 @@ module.exports = {
             "यार मेरे सिर 💇 के बाल 💆 क्यों नहीं आते ?🥹🥲🥹👈"
         ];
 
-        // Check if the message contains 'taklu' or 'bot'
         if (message.includes('taklu') || message.includes('bot')) {
-            // Pick a random funny response
             const randomResponse = responses[Math.floor(Math.random() * responses.length)];
+            console.log("Selected response: ", randomResponse);  // For debugging
 
-            // Send the response mentioning the user
             api.sendMessage({
                 body: `@${userName}, ${randomResponse}`,
                 mentions: [{ tag: `@${userName}`, id: userName }]
             }, event.threadID);
+        } else {
+            console.log("No matching words found.");  // For debugging
         }
     },
 };
